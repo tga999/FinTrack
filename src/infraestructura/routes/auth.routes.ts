@@ -1,5 +1,5 @@
 import { Router } from 'express'
-import { registro, login } from '../controllers/auth.controller'
+import { registro, login, me } from '../controllers/auth.controller'
 import { verificarToken, RequestConUsuario } from '../middlewares/auth.middleware'
 
 
@@ -14,6 +14,7 @@ router.post('/login',login)
 router.get('/perfil', verificarToken, (req: RequestConUsuario, res) => {
     res.json({mensaje: 'Ruta protegida', usuarioId: req.usuarioId})
 })
+router.get('/me', verificarToken, me)
 
 export default router
 

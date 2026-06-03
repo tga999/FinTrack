@@ -5,6 +5,7 @@ import { User } from '../database/models/User'
 import { UserRegister, UserLogin } from '../validators/userValidator'
 import { ENV } from '../config/env'
 import { z } from 'zod'
+import { RequestConUsuario } from '../middlewares/auth.middleware'
 
 
 
@@ -88,3 +89,16 @@ export const login = async (req: Request, res: Response): Promise<void> => {
             res.status(500).json({ mensaje: 'Error en el servidor' })
         }
     }
+
+export const me = async (req: RequestConUsuario, res: Response): Promise<void> => {
+    try {
+        const usuario = await User.findById(req.usuarioId).select('-password')
+        if (!usuario) {
+            res.status(404).json({ mensaje: 'Usuario no encontrado' })
+            return
+        }
+        res.status(200).json({usuario})   
+    } catch (error) {
+        res.status(500).json({ mensaje: 'Error en el servidor' })
+    }  
+}            
